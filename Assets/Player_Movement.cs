@@ -8,6 +8,8 @@ public class Player_Movement : MonoBehaviour
     private float speed = 8f;
     private float jumpingPower = 16f;
 
+    public bool isGrounded=false;
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -22,7 +24,7 @@ public class Player_Movement : MonoBehaviour
     {
       horizontal = Input.GetAxisRaw("Horizontal");
 
-      if(Input.GetButtonDown("Jump"))
+      if(Input.GetButtonDown("Jump") && IsGrounded())
       {
         rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
       }
@@ -33,12 +35,30 @@ public class Player_Movement : MonoBehaviour
     }
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f,groundLayer);
-    }
+        // Debug.Log(Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer) != null ? "Grounded" : "Not Grounded");
+         // return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+         return isGrounded;
+
+        
+     }
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
 
+
+    }
+
+    void OnCollisionStay2D(Collision2D col)
+    {
+        if (col.collider.CompareTag("Platform")) {
+            isGrounded=true;
+        }
+    }
+    void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.collider.CompareTag("Platform")) {
+            isGrounded=false;
+        }
     }
 
 }
