@@ -12,12 +12,14 @@ public class Spawner : MonoBehaviour
     }
     IEnumerator WaitForSpawn()
     {
-        yield return null;
+        Spawn();
+        yield return new WaitForSeconds(3f);
+        StartCoroutine("WaitForSpawn");
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine("WaitForSpawn");
     }
 
     // Update is called once per frame
