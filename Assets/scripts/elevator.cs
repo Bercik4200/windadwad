@@ -2,13 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class score : MonoBehaviour
+public class elevator : MonoBehaviour
 {
-    private int wynik = 0;
-
-    public Text score_text;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +14,12 @@ public class score : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        wynik = (int)Math.Round(Time.timeSinceLevelLoad, 0);
         
-        score_text.text = wynik.ToString();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        Destroy(other.gameObject);
+        throw new NotImplementedException();
     }
 }
