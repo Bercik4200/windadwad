@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
     public Transform groundCheck;
     public LayerMask mask;
+    public AudioClip jumpSound; // Dodaj zmienną do przechowywania dźwięku skoku
+    private AudioSource audioSource; // Dodaj zmienną do komponentu AudioSource
+
 
     void Start()
     {
@@ -35,8 +38,13 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            
+            PlayJumpSound();
         }
+    }
+
+    void PlayJumpSound()
+    {
+        audioSource.PlayOneShot(jumpSound); // Funkcja do odtwarzania dźwięku skoku
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
