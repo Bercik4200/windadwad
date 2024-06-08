@@ -6,7 +6,7 @@ public class Infinitescrolling : MonoBehaviour
 {
     private Material material;
 
-    public Vector2 scroll_speed;
+    private Vector2 scroll_speed;
 
     public int xVelocity, yVelocity;
     // Start is called before the first frame update
@@ -16,7 +16,7 @@ public class Infinitescrolling : MonoBehaviour
     }
     void Start()
     {
-        scroll_speed = new Vector2(xVelocity, yVelocity);
+        scroll_speed = new Vector2(xVelocity, 0.25f);
     }
 
     // Update is called once per frame

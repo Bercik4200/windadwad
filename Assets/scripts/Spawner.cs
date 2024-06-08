@@ -8,12 +8,12 @@ public class Spawner : MonoBehaviour
     public void Spawn()
     {
         int randomize = Random.Range(0, obstacles.Count);
-        Instantiate(obstacles[randomize]);
+        Instantiate(obstacles[randomize], transform);
     }
     IEnumerator WaitForSpawn()
     {
         Spawn();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.7f);
         StartCoroutine("WaitForSpawn");
     }
     // Start is called before the first frame update
