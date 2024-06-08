@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +13,11 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
     public Transform groundCheck;
     public LayerMask mask;
+    public GameObject deathFX;
 
+    public AudioClip umieram;
+    public AudioClip skacze;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -19,9 +25,23 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        DeathCondition();
+        
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 2f, mask);
         Move();
         Jump();
+        
+        // zmiana kierunku grafiki
+        if (Input.GetAxis("Horizontal") < 0)
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        }
+        
+        
     }
 
     void Move()
@@ -32,9 +52,10 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (isGrounded && (Input.GetKeyDown(KeyCode.Space) || (Input.GetKeyDown(KeyCode.UpArrow))))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            gameObject.GetComponent<AudioSource>().PlayOneShot(skacze);
             
         }
     }
@@ -54,6 +75,29 @@ public class PlayerController : MonoBehaviour
         {
             canJump = false; // Disable jumping when the player leaves the platform
             
+        }
+    }
+
+
+    private void DeathCondition()
+    {
+        // wysoksoc gracza
+        if (transform.position.y < -5.3f)
+        {
+            
+            //particle
+            Instantiate(deathFX, transform.position, quaternion.identity);
+            
+            // audio
+            gameObject.GetComponent<AudioSource>().PlayOneShot(umieram);
+
+            //umrzyj
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(0);
+            }
+
+
         }
     }
 }
